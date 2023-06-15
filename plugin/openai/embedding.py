@@ -1,4 +1,13 @@
+import requests, json
 import openai
+from fastapi import APIRouter
+from util import config
+
+openai.api_key = config["OPENAI_KEY"]
+
+router = APIRouter(
+    prefix="/api",
+)
 
 def get_embedding(text):
     """
