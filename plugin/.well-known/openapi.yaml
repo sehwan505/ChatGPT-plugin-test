@@ -4,7 +4,7 @@ info:
   description: A plugin that allows the user to create and manage a TODO list using ChatGPT.
   version: 'v1'
 servers:
-  - url: http://104.155.157.27
+  - url: https://dart-plugin.com
 paths:
   /todos:
     get:
