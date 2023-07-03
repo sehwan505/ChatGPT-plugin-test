@@ -2,8 +2,8 @@
     "schema_version": "v1",
     "name_for_human": "Test Plugin",
     "name_for_model": "test",
-    "description_for_human": "Manage your TODO list. You can add, remove and view your TODOs.",
-    "description_for_model": "Help the user with managing a TODO list. You can add, remove and view your TODOs.",
+    "description_for_human": "Get korean corporate's disclosures",
+    "description_for_model": "Get korean corporates' disclosures",
     "auth": {
         "type": "none"
     },
