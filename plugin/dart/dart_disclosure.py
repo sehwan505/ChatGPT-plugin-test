@@ -3,12 +3,11 @@ from util import config
 import xml.etree.ElementTree as ET
 import lxml.etree as etree
 from fastapi import APIRouter
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
 import pandas as pd
 import zipfile
 import io
 import json
+from .dart_util import get_date_months_ago, get_corporate_code
 
 
 
@@ -23,10 +22,7 @@ def get_disclosure_list_by_corporate(corp_name: str):
     corp_code = get_corporate_code(corp_name)
     if corp_code == None:
         return "해당 기업이 없습니다"
-    else:
-        print(corp_code)
-        corp_code = str(corp_code).rjust(8, '0')
-
+        
     url = 'https://opendart.fss.or.kr/api/list.json'  # replace with the actual endpoint
     params = {
         'crtfc_key': api_key,
@@ -45,6 +41,7 @@ def get_disclosure_list_by_corporate(corp_name: str):
 
 @router.get("/get_disclosure_detail")
 def get_disclosure_detail(rcept_no: str):
+    return f"https://dart.fss.or.kr/dsaf001/main.do?rcpNo={rcept_no}"
     url = 'https://opendart.fss.or.kr/api/document.xml'  # replace with the actual endpoint
     params = {
         'crtfc_key': api_key,
@@ -64,24 +61,6 @@ def get_disclosure_detail(rcept_no: str):
     else:
         return None
 
-@router.get("/get_corporate_code")
-def get_corporate_code(corp_name: str):
-    file_path = "/config/workspace/ChatGPT-plugin-test/plugin/dart/corpcode.json"
-    with pd.read_json(file_path, lines=True, chunksize=300) as reader:
-        for idx, chunk in enumerate(reader):
-            ret = chunk.loc[chunk['corp_name'] == corp_name, "corp_code"]
-            if ret.empty:
-                continue
-            return ret.item()
-        return None
-
-
-def get_date_months_ago(months: int):
-    today = datetime.today()
-    three_months_ago = today - relativedelta(months=months)
-
-    formatted_date = three_months_ago.strftime("%Y%m%d")
-    return formatted_date
 
 import re
 def replace_reserved_word(rcept_no: str):

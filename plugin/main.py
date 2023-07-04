@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from database import pinecone_db
-from dart import dart_api
+from dart import dart_disclosure, dart_finance
 
 app = FastAPI()
 
@@ -19,5 +19,6 @@ app.add_middleware(
 )
 
 app.include_router(pinecone_db.router)
-app.include_router(dart_api.router)
+app.include_router(dart_disclosure.router)
+app.include_router(dart_finance.router)
 app.mount("/.well-known", StaticFiles(directory=".well-known"), name="static")
