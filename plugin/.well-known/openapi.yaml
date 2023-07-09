@@ -24,25 +24,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/getDisclosureListResponse'
-  /dart/get_disclosure_detail:
+
+  /dart/get_contents_of_business:
     get:
-      operationId: get_disclosure_detail
-      summary: Get disclosure url of given rcept_no
+      operationId: get_contents_of_business
+      summary: Get business part in disclosure contents of given rcept_no
       parameters:
         - in: query
           name: rcept_no
           schema:
             type: string
           required: true
-          description: disclosure rcept_no which you want to get content of disclosure
+          description: disclosure rcept_no which you want to get business part of disclosure
       
       responses:
         "200":
           description: OK
-          content: string
-            # application/json:
-            #   schema:
-            #     # $ref: '#/components/schemas/getDisclosureDetailResponse'
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getBusinessResponse'
 
   /dart/financial_statement:
     get:
@@ -117,10 +118,9 @@ components:
                 type: string
               rm:
                 type: string
-    getDisclosureDetailResponse:
-      type: array
-      items:
-        type: string
+    
+    getBusinessResponse:
+      type: string
     
     getFinancialStatementResponse:
       type: array

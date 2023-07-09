@@ -7,6 +7,8 @@ import pandas as pd
 import zipfile
 import io
 import json
+import os
+from collections import defaultdict
 from .dart_util import get_date_months_ago, get_corporate_code
 
 
@@ -38,10 +40,10 @@ def get_disclosure_list_by_corporate(corp_name: str):
     else:
         return None
 
-
-@router.get("/get_disclosure_detail")
-def get_disclosure_detail(rcept_no: str):
-    return f"https://dart.fss.or.kr/dsaf001/main.do?rcpNo={rcept_no}"
+def save_disclosure_detail(rcept_no: str):
+    if os.path.isfile(f"{rcept_no}.xml"):
+        return 200
+    # return f"https://dart.fss.or.kr/dsaf001/main.do?rcpNo={rcept_no}"
     url = 'https://opendart.fss.or.kr/api/document.xml'  # replace with the actual endpoint
     params = {
         'crtfc_key': api_key,
@@ -53,14 +55,23 @@ def get_disclosure_detail(rcept_no: str):
         # Extract the XML file from the ZIP archive
         zip_ref.extract(f"{rcept_no}.xml")
         replace_reserved_word(rcept_no)
-        tree = ET.parse(f"{rcept_no}.xml")
-        root = tree.getroot()
-    d = etree_to_dict(root)
     if response.status_code == 200:
-        return json.dumps(d, indent=4,  ensure_ascii=False)
+        return response.status_code
     else:
         return None
 
+@router.get("/get_contents_of_business")
+def get_contents_of_business(rcept_no):
+    save_disclosure_detail(rcept_no)
+    with open(f"{rcept_no}.xml", 'r') as file:
+        content = file.read()
+    
+    pattern = r"""(<SECTION-1 ACLASS="MANDATORY" APARTSOURCE="SOURCE">\n<TITLE ATOC="Y" AASSOCNOTE="D-0-2-0-0">II\. 사업의 내용<\/TITLE>[\s\S]*?<\/SECTION-1>)"""
+    output_str = re.findall(pattern, content)[0]
+    tree = ET.ElementTree(ET.fromstring(output_str))
+    root = tree.getroot()
+    data = convert_etree_to_text(root)
+    return data
 
 import re
 def replace_reserved_word(rcept_no: str):
@@ -73,22 +84,32 @@ def replace_reserved_word(rcept_no: str):
     pattern2 = r'(<P.*?>)(.*)(\n?<SPAN.*?>)(.*?)(</SPAN>)(.*)'
     replacement2 = r'\1<![CDATA[\2]]>\3\4\5\6'
     output_str2 = re.sub(pattern2, replacement2, output_str)
-    # pattern2 = r'<P>(<SPAN>.*?</SPAN>)+(.*?)</P>'
-    # replacement2 = r'<P>\1<![CDATA[\2]]></P>'
-    # output_str = re.sub(pattern2, replacement2, output_str)
-    
+    # pattern3 = r"""(<SECTION-1 ACLASS="MANDATORY" APARTSOURCE="SOURCE">\n<TITLE ATOC="Y" AASSOCNOTE="D-0-2-0-0">II\. 사업의 내용<\/TITLE>[\s\S]*?<\/SECTION-1>)"""
+    # output_str3 = re.findall(pattern3, output_str2)
+
     with open(f"{rcept_no}.xml", 'w') as file:
         file.write(output_str2)
 
-def etree_to_dict(t):
-    children = list(t)
-    if children:
-        dd = []
-        for dc in map(etree_to_dict, children):
-            if isinstance(dc, list):
-                dd.extend(dc)
-            else:
-                dd.append(dc)
-        return dd
-    else:
-        return t.text.strip() if t.text else None
+def cut_contents_of_business(rcept_no: str):
+    with open(f"{rcept_no}.xml", 'r') as file:
+        content = file.read()
+    
+    pattern = r"""(<SECTION-1 ACLASS="MANDATORY" APARTSOURCE="SOURCE">\n<TITLE ATOC="Y" AASSOCNOTE="D-0-2-0-0">II\. 사업의 내용<\/TITLE>[\s\S]*?<\/SECTION-1>)"""
+    output_str = re.findall(pattern, content)
+
+    return output_str[0]
+
+
+def etree_to_text_list(t):
+    text_list = []
+    if t.text:
+        text = t.text.strip()
+        if text:
+            text_list.append(text)
+    for child in t:
+        text_list.extend(etree_to_text_list(child))
+    return text_list
+
+def convert_etree_to_text(etree_obj):
+    text_list = etree_to_text_list(etree_obj)
+    return " ".join(text_list)
