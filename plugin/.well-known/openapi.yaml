@@ -44,11 +44,51 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/getBusinessResponse'
+  
+  /dart/get_contents_of_investor_protection:
+    get:
+      operationId: get_contents_of_investor_protection
+      summary: Get information to protect investors in disclosure contents of given rcept_no
+      parameters:
+        - in: query
+          name: rcept_no
+          schema:
+            type: string
+          required: true
+          description: disclosure rcept_no which you want to get information to protect investors in disclosure
+      
+      responses:
+        "200":
+          description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getInvestorProtectionResponse'
+  
+  /dart/get_contents_of_management_diagnosis:
+    get:
+      operationId: get_contents_of_management_diagnosis
+      summary: Get director's management diagnosis and analysis opinion in disclosure of given rcept_no
+      parameters:
+        - in: query
+          name: rcept_no
+          schema:
+            type: string
+          required: true
+          description: disclosure rcept_no which you want to get director's management diagnosis and analysis
+      
+      responses:
+        "200":
+          description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getManagementDiagnosisResponse'
 
   /dart/financial_statement:
     get:
       operationId: get_financial_statement
-      summary: Get fianacail_statement of corporate 재무제표
+      summary: Get fianacail_statement of corporate 재무제표 financial statement
       parameters:
         - in: query
           name: corp_name
@@ -120,6 +160,12 @@ components:
                 type: string
     
     getBusinessResponse:
+      type: string
+
+    getInvestorProtectionResponse:
+      type: string
+    
+    getManagementDiagnosisResponse:
       type: string
     
     getFinancialStatementResponse:

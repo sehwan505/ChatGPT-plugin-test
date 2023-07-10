@@ -3,7 +3,7 @@ from util import config
 from fastapi import APIRouter
 import pandas as pd
 import json
-from .dart_util import get_date_months_ago, get_corporate_code
+from .dart_util import get_date_months_ago, get_corporate_code, etree_to_text_list, convert_etree_to_text
 
 api_key = config["DART_KEY"]
 
