@@ -48,14 +48,14 @@ paths:
   /dart/get_contents_of_investor_protection:
     get:
       operationId: get_contents_of_investor_protection
-      summary: Get information to protect investors in disclosure contents of given rcept_no
+      summary: Get essential information for investors in disclosure contents of given rcept_no
       parameters:
         - in: query
           name: rcept_no
           schema:
             type: string
           required: true
-          description: disclosure rcept_no which you want to get information to protect investors in disclosure
+          description: disclosure rcept_no which you want to get essential information for investors in disclosure
       
       responses:
         "200":
@@ -174,47 +174,42 @@ components:
         type: object
         properties:
           rcept_no:
-            type: string
-            example: "20221114001832"
-          reprt_code:
-            type: string
-            example: "11014"
-          bsns_year:
-            type: string
-            example: "2022"
-          corp_code:
-            type: string
-            example: "00126380"
-          sj_div:
-            type: string
-            example: "BS"
-          sj_nm:
-            type: string
-            example: "재무상태표"
-          account_id:
-            type: string
-            example: "dart_OtherCurrentLiabilities"
-          account_nm:
-            type: string
-            example: "기타유동부채"
-          account_detail:
-            type: string
-            example: "-"
-          thstrm_nm:
-            type: string
-            example: "제 54 기 3분기말"
-          thstrm_amount:
-            type: string
-            example: "528447000000"
-          frmtrm_nm:
-            type: string
-            example: "제 53 기말"
-          frmtrm_amount:
-            type: string
-            example: "341038000000"
-          ord:
-            type: string
-            example: "30"
-          currency:
-            type: string
-            example: "KRW"
+          type: string
+        reprt_code:
+          type: string
+        bsns_year:
+          type: string
+          description: Year of issuance of the relevant financial statements
+        corp_code:
+          type: string
+        sj_div:
+          type: string
+        sj_nm:
+          type: string
+        account_id:
+          type: string
+        account_nm:
+          type: string
+          description: account name
+        account_detail:
+          type: string
+        thstrm_nm:
+          type: string
+        thstrm_amount:
+          type: string
+          description: amount of the current term
+        thstrm_add_amount:
+          type: string
+          description: cumulative amount of the current term
+        frmtrm_q_nm:
+          type: string
+        frmtrm_q_amount:
+          type: string
+          description: amount of the previous term
+        frmtrm_add_amount:
+          type: string
+          description: cumulative amount of the previous term
+        ord:
+          type: string
+        currency:
+          type: string

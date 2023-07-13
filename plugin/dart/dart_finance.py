@@ -30,8 +30,9 @@ def financial_statement(corp_name: str, year: str, quater: int):
     response = requests.get(url, params=params)
 
     if response.status_code == 200:
-        data = response.json()
+        data = response.json().get('list')
         print(data)
+        # ret = [{"bsns_year": d["bsns_year"], "account_nm":d["account_nm"], "thstrm_amount": d["thstrm_amount"], "thstrm_add_amount":d["thstrm_add_amount"], "frmtrm_q_amount": d["frmtrm_q_amount"], "frmtrm_add_amount": d["frmtrm_add_amount"]} for d in data]
         return data
     else:
         print(f"Request failed with status code {response.status_code}")
