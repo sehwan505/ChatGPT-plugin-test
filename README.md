@@ -12,7 +12,7 @@ Before you begin, ensure you have met the following requirements:
 - You have installed FastAPI and Uvicorn. You can install these using poetry:
 
 ```bash
-pip install fastapi uvicorn
+poetry add fastapi uvicorn
 ```
 
 ## Usage
