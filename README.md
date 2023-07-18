@@ -8,7 +8,8 @@ This project provides a plugin that returns Korean corporate disclosures. The pl
 Before you begin, ensure you have met the following requirements:
 
 - You have installed Python 3.7 or later.
-- You have installed FastAPI and Uvicorn. You can install these using pip:
+- You have installed Poetry
+- You have installed FastAPI and Uvicorn. You can install these using poetry:
 
 ```bash
 pip install fastapi uvicorn
@@ -21,18 +22,21 @@ To run the application locally:
 1. Clone the repository:
 
 ```bash
-git clone <repo_link>
+git clone https://github.com/sehwan505/DART-ChatGPT-PLUGIN.git
 ```
 
 2. Navigate into the cloned repository:
 
 ```bash
-cd <repo_name>
+cd DART-ChatGPT-PLUGIN
 ```
 
 3. Run the FastAPI application with Uvicorn:
 
 ```bash
+poetry install
+poetry shell
+cd plugin
 uvicorn main:app --reload
 ```
 
@@ -78,8 +82,4 @@ This project is licensed under the terms of the MIT license.
 
 ## Contact
 
-If you have any questions or comments, please feel free to contact us.
-
-## Disclaimer
-
-This plugin does not provide financial advice. Please consult with a financial advisor before making any financial decisions based on the information provided by this plugin.
+If you have any questions or comments, please feel free to contact me.
